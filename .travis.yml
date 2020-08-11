@@ -7,3 +7,17 @@ before_install:
 
 install:
   pip3 install ue4-docker
+
+before_script:
+  - sudo ue4-docker setup
+
+script:
+  - ue4-docker build 4.25.1 --no-engine
+  - ue4-docker clean --source
+  - ue4 build
+  - ue4 package
+
+branches:
+  only:
+    - develop
+    
