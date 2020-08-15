@@ -1,0 +1,35 @@
+dist: focal
+language: python
+python:
+  - "3.7"
+before_install:
+  sudo apt-get install python3-dev python3-pip
+
+# install:
+#   sudo pip3 install ue4-docker
+
+addons:
+  sonarcloud:
+    organization: "dragv"
+    token:
+      secure: "rk9g9EF5zbS5U+4A0PJZL3Ls+HCheSeFXIppDDRfjcWIWufaKMKhNEer9Xz+cyvReGYC4tQDZu9d7mopj4Bo2Aq60b0Boqu7aquz38bg2Tcgy3/695qj0SMe705ElSoAOQ0IjsTUarjSZgNVjpKO1y3/aw3yitGI5K/mW0UbqSt/hMQ5HUyF0ORCrYg5dtVMZcXB+Ibo6wlQWMweTBnlU8I2/lqYo9NBBn5kaOMOadhdlnu3Vbxvdrett4nHb1PRFSprDVbn0Y60fjOaKIxxExCfz1H+H07JryHsACUcKrwFzuTGwHtke1FvQ1ubRvktjYKGueeEnjcwFbyE0rpYWbk1TW6+y8ZCzPRj2TTvIACrxkmRagYvZOvycE6Fs9WpvTJ7sT0KOLwT2JCNekucDcQ2+WZ9illZvjLJ4+bl81q1phVqa/LogYSMOgtM/CI8SvqeXId0JV6pQRQ+adfDn6Zw/SL7TwxT2Zv3uSAfjh/rW9v8pK+FaI26l5XK9C8DsoBhnuFNTFXAMP7+/PP30b8hoIFToJvQVCyF/R1MdpfhHf8Hsqort+3YIhxTSPzjKXf7O7V2XdPe9hK5Yo2x8bmihIZwOU6vKHzYxukPeIjOO/aBsoysEioxmnPiPaGDDSlTdiTevx/HsFYF8R4U0hVzJ2foAwtk52Yq5uh6k5k="
+
+script:
+  # Wraps the compilation with the Build Wrapper to generate configuration (used
+  # later by the SonarScanner) into the "bw-output" folder
+  - build-wrapper-linux-x86-64 --out-dir bw-output <your clean build command>
+  # And finally run the SonarCloud analysis - read the "sonar-project.properties"
+  # file to see the specific configuration
+  - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
+
+# script:
+#   - sudo ue4-docker setup
+#   - ue4-docker build 4.25.1 -username $USERNAME -password $PASS --no-engine
+#   - ue4-docker clean --source
+#   - ue4 build
+#   - ue4 package
+
+branches:
+  only:
+    - develop
+    
